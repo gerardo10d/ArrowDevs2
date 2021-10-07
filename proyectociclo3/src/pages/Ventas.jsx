@@ -2,6 +2,7 @@ import '../styles/estilos-ventas.css'
 import React, { useEffect, useState, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { nanoid } from 'nanoid'
 
 const Ventas = () => {
     const [mostrarTabla, setMostrarTabla] = useState(true);
@@ -74,33 +75,39 @@ const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) =
             <label htmlFor="codigo" className='flexFlexCol'>
                 Código de la venta
                 <input 
-                name='codigo'
-                type="number"
-                min={1}
-                required
+                  className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
+                  name='codigo'
+                  type="number"
+                  min={1}
+                  required
                  />
             </label>
             <label htmlFor="nombre" className='flexFlexCol'>
                 Nombre del producto
-                <input 
-                name='nombre'
-                type="text"
-                placeholder='Ej: Yogurt'
-                required
+                <input
+                  className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
+                  name='nombre'
+                  type="text"
+                  placeholder='Ej: Yogurt'
+                  required
                  />
             </label>
             <label htmlFor="cantidad" className='flexFlexCol'>
                 Cantidad del producto
                 <input 
-                name='cantidad'
-                type="number"
-                min={1}
-                required
+                  className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
+                  name='cantidad'
+                  type="number"
+                  min={1}
+                  required
                  />
             </label>
             <label htmlFor="unidad" className='flexFlexCol'>
                 Unidad
-                <select name='unidad' defaultValue={0} required >
+                <select
+                  name='unidad' defaultValue={0} required
+                  className='border border-gray-600'
+                   >
                     <option disabled value={0}>Seleccione una opción</option>
                     <option>Litros</option>
                     <option>Libras</option>
@@ -109,13 +116,15 @@ const FormularioCreacionVentas = ({ setMostrarTabla, listaVentas, setVentas }) =
             <label htmlFor="valor" className='flexFlexCol'>
                 Valor de la venta
                 <input 
-                name='valor'
-                type="number"
-                min={1}
-                required
+                  className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
+                  name='valor'
+                  type="number"
+                  min={1}
+                  required
                  />
             </label>
             <button
+                className='bg-blue-800 text-white border border-gray-600 p-2 rounded-lg m-2'
                 type='submit'
                 >
                 Registrar venta                    
@@ -143,18 +152,13 @@ const TablaVentas = ({ listaVentas }) => {
               <th>Cantidad</th>
               <th>Unidad</th>
               <th>Valor</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
             {listaVentas.map((venta) => {
               return (
-                <tr>
-                  <td>{venta.codigo}</td>
-                  <td>{venta.nombre}</td>
-                  <td>{venta.cantidad}</td>
-                  <td>{venta.unidad}</td>
-                  <td>{venta.valor}</td>
-                </tr>
+                <FilaVentas key={nanoid()} venta={venta} />
               );
             })}
           </tbody>
@@ -162,5 +166,66 @@ const TablaVentas = ({ listaVentas }) => {
       </div>
     );
   };
+
+
+const FilaVentas = ({venta}) => {
+  const [edit, setEdit] = useState(false)
+  return(
+    <tr>
+      {edit ? (
+        <>
+          <td>
+            <input 
+              className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
+              type="text"
+              defaultValue={venta.codigo}/>
+          </td>
+          <td>
+            <input
+              className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
+              type="text"
+              defaultValue={venta.nombre}/>
+          </td>
+          <td>
+            <input
+              className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
+              type="text"
+              defaultValue={venta.cantidad}/>
+          </td>
+          <td>
+            <input
+              className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
+              type="text"
+              defaultValue={venta.unidad}/>
+          </td>
+          <td>
+            <input
+              className='bg-gray-50 border border-gray-600 p-2 rounded-lg m-2'
+              type="text"
+              defaultValue={venta.valor}/>
+          </td>
+        </>
+      ) : (
+        <>
+          <td>{venta.codigo}</td>
+          <td>{venta.nombre}</td>
+          <td>{venta.cantidad}</td>
+          <td>{venta.unidad}</td>
+          <td>{venta.valor}</td>
+        </>
+      )}
+      <td>
+        <div className='flex w-full justify-around'>
+          {edit ? (
+            <i onClick={() => setEdit(!edit)} className='fas fa-check-circle text-blue-700 hover:text-green-600' />
+          ) : (
+            <i onClick={() => setEdit(!edit)} className="fas fa-edit text-blue-700 hover:text-green-600"/>
+          )}
+          <i className="fas fa-trash text-blue-700 hover:text-green-600" />
+        </div>
+      </td>
+    </tr>
+  )
+}
 
 export default Ventas
